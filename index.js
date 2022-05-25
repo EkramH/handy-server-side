@@ -22,6 +22,7 @@ async function run() {
     await client.connect();
     const productCollection = client.db("handy_data").collection("products");
     const purchasedCollection = client.db("handy_data").collection("purchased");
+    const userCollection = client.db("handy_data").collection("users");
 
     // Get all products
     app.get("/product", async (req, res) => {
@@ -38,6 +39,18 @@ async function run() {
       const product = await productCollection.findOne(query);
       res.send(product);
     });
+
+    app.put("/user/:email", async (req, res) =>{
+      const email = req.params.email;
+      const user = req.body;
+      const filter = {email: email};
+      const options = { upsert : true };
+      const updatedDoc = {
+        $set: user, 
+      };
+      const result = await userCollection.updateOne(filter, updatedDoc, options);
+      res.send(result);
+    })
 
     //Update product price
     app.put("/product/:id", async (req, res) => {
