@@ -21,10 +21,12 @@ async function run() {
   try {
     await client.connect();
     const productCollection = client.db("handy_data").collection("products");
+    const purchasedCollection = client.db("handy_data").collection("purchased");
 
     // Get all products
     app.get("/product", async (req, res) => {
       const query = {};
+      console.log(query)
       const cursor = productCollection.find(query);
       const products = await cursor.toArray();
       res.send(products);
@@ -56,6 +58,14 @@ async function run() {
       );
       res.send(result);
     });
+
+    //Purchased post api
+    app.post("/purchased", async (req, res) =>{
+      const purchased = req.body;
+      const result = await purchasedCollection.insertOne(purchased);
+      console.log(result)
+      res.send(result);
+    })
   } finally {
   }
 }
