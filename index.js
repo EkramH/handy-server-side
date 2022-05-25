@@ -58,6 +58,13 @@ async function run() {
       res.send(product);
     });
 
+    //Get User
+    app.get("/user", verifyJWT, async (req, res) =>{
+      const users = await userCollection.find().toArray();
+      res.send(users.reverse());
+    })
+
+
     // Put user
     app.put("/user/:email", async (req, res) =>{
       const email = req.params.email;
