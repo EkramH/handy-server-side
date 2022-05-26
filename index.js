@@ -163,6 +163,14 @@ async function run() {
             res.send(result);
         });
 
+        // Delete user
+        app.delete('/user/:email', async(req, res) => {
+            const email = req.params.email;
+            const query = { email: email };
+            const result = await userCollection.deleteOne(query);
+            res.send(result);
+        })
+
         //Delete Order from
         app.delete('/purchased/:id', async(req, res) => {
             const id = req.params.id;
