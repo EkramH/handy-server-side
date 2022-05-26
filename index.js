@@ -48,7 +48,7 @@ async function run() {
             const query = {};
             const cursor = productCollection.find(query);
             const products = await cursor.toArray();
-            res.send(products);
+            res.send(products.reverse());
         });
 
 
@@ -148,6 +148,13 @@ async function run() {
                 return res.status(403).send({ message: "Forbidden access" })
             }
         });
+
+        // Add item Post 
+        app.post("/products", async(req, res) =>{
+            const addItem = req.body;
+            const result = await productCollection.insertOne(addItem);
+            res.send(result)
+        })
 
         // Add review 
         app.post('/reviews', async(req, res) => {
