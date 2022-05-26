@@ -67,6 +67,13 @@ async function run() {
             res.send(users.reverse());
         })
 
+        // Get One User
+        app.get("/user/:email", async(req, res) => {
+            const email = req.params.email;
+            const user = await userCollection.findOne({ email: email});
+            res.send(user);
+        })
+
         //Get admin
         app.get("/admin/:email", async(req, res) => {
             const email = req.params.email;
