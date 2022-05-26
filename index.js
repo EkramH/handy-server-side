@@ -50,6 +50,7 @@ async function run() {
       res.send(products);
     });
 
+
     // Get one product
     app.get("/product/:id", async (req, res) => {
       const id = req.params.id;
@@ -58,10 +59,36 @@ async function run() {
       res.send(product);
     });
 
+
     //Get User
     app.get("/user", verifyJWT, async (req, res) =>{
       const users = await userCollection.find().toArray();
       res.send(users.reverse());
+    })
+
+    //Get admin
+    app.get("/admin/:email", async(req, res) =>{
+      const email = req.params.email;
+      const user = await userCollection.findOne({email: email});
+      const isAdmin = user.role === "admin";
+      res.send({admin: isAdmin})
+    })
+
+    //Making admin and finding admin
+    app.put("/user/admin/:email", verifyJWT, async (req, res) =>{
+      const email = req.params.email;
+      const requester = req.decoded.email;
+      const requesterAccount = await userCollection.findOne({ email: requester });
+      if(requesterAccount.role === 'admin'){
+        const filter = {email: email};
+        const updatedDoc = {
+          $set: {role:'admin'}, 
+        };
+        const result = await userCollection.updateOne(filter, updatedDoc);
+        res.send(result);
+      }else{
+        res.status(403).send({message: 'Fobidden'});
+      }
     })
 
 
@@ -79,6 +106,7 @@ async function run() {
       res.send({result, token});
     })
 
+    
     //Update product price
     app.put("/product/:id", async (req, res) => {
       const id = req.params.id;
@@ -98,6 +126,7 @@ async function run() {
       res.send(result);
     });
 
+
     //Get one purchased 
     app.get("/purchased", verifyJWT, async (req, res) =>{
       const userEmail = req.query.userEmail;
@@ -109,14 +138,15 @@ async function run() {
       }else{
         return res.status(403).send({message: "Forbidden access"})
       }
-    })
+    });
+
 
     //Purchased post api
     app.post("/purchased", async (req, res) =>{
       const purchased = req.body;
       const result = await purchasedCollection.insertOne(purchased);
       res.send(result);
-    })
+    });
   } finally {
   }
 }
