@@ -2,6 +2,9 @@ const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
 var jwt = require('jsonwebtoken');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+
+
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -154,6 +157,27 @@ async function run() {
             } else {
                 return res.status(403).send({ message: "Forbidden access" })
             }
+        });
+
+        // Get one purchased by id
+        app.get("/purchased/:id", verifyJWT, async(req, res) =>{
+            const id = req.params.id;
+            const query = { _id: ObjectId(id)};
+            const purchased = await purchasedCollection.findOne(query);
+            res.send(purchased)
+        })
+
+        // Payment API
+        app.post("/create-payment-intent", verifyJWT, async (req, res) =>{
+            const product = req.body;
+            const price = product.price;
+            const amount = price*100;
+            const paymentIntent = await stripe.paymentIntents.create({
+                amount: amount,
+                currency: "usd",
+                payment_method_types: ['card']
+            });
+            res.send({clientSecret: paymentIntent.client_secret})
         });
 
         // Add item Post 
