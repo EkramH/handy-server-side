@@ -185,11 +185,19 @@ async function run() {
             res.send(result);
         })
 
-        //Delete Order from
+        //Delete Order
         app.delete('/purchased/:id', async(req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
             const result = await purchasedCollection.deleteOne(query);
+            res.send(result);
+        })
+
+        // Delete product
+        app.delete('/products/:id', async(req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id)};
+            const result = await productCollection.deleteOne(query);
             res.send(result);
         })
     } finally {}
