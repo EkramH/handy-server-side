@@ -2,7 +2,6 @@
 
 ## [Handy Live Link](https://handy-b2384.web.app/)
 
-
 ## Details
 
 It's a Tools Manufacturer full-stack website using `react`, `firebase`, `react router`, `node`, `express`, `mongodb`, `tailwind`, `daisyUI`. Here a user can view and purchase products. It also has a dedicated admin panel where an admin has access to control the overall website like orders processing, new admin assign, etc.
@@ -18,4 +17,4 @@ It's a Tools Manufacturer full-stack website using `react`, `firebase`, `react r
 - For client-side used `react`, `tailwind`, `daisyUI`, `react-hook-form`, and `react-query`.
 - For server-side used `node` `express`.
 
-## [Handy Client Code](https://github.com/programming-hero-web-course1/manufacturer-website-client-side-EkramH)
+## [Handy Client Code](https://github.com/EkramH/handy-client-side)
